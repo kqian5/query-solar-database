@@ -13,7 +13,9 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by ahmetkucuk on 28/12/15.
+ * Class that sets up database and rabbitmq configurations and connections
+ * @author - ahmetkucuk
+ * @author - kqian5
  */
 public class DBPrefs {
 
@@ -28,6 +30,10 @@ public class DBPrefs {
     public static final int DB_PORT = 5432;
 
 
+    /**
+     * Sets the POSTGRE database configurations in a BasicDataSource object and returns it
+     * @return - the BasicDataSource object to return
+     */
     public static BasicDataSource getDataSource() {
 
         Map<String, String> env = System.getenv();
@@ -48,6 +54,11 @@ public class DBPrefs {
         return dbPoolSourc;
     }
 
+    /**
+     * Method that creates a map of all the necessary
+     * configuration settings for a postgres db
+     * @return - map of setting to its value
+     */
     public static Map<String, String> getTestEnv(){
         Map<String, String> env = new HashMap<>();
         env.put("POSTGRES_USER", "postgres");
@@ -57,6 +68,9 @@ public class DBPrefs {
         return env;
     }
 
+    /**
+     * Method that pauses the thread for 2000 milliseconds
+     */
     public static void pause() {
         try {
             Thread.sleep(2000);
@@ -65,6 +79,11 @@ public class DBPrefs {
         }
     }
 
+    /**
+     * Method that attempts to connect to database
+     * until a connection is successful and checks connection
+     * by perform sql command "SELECT 1"
+     */
     public static void waitUntilConnected() {
 
         boolean connected = false;
@@ -98,6 +117,13 @@ public class DBPrefs {
         }
     }
 
+    /**
+     * Method that attempts to connect to rabbitmq until a 
+     * connection is successful, pausing for 2000 milliseconds
+     * between request
+     * @param host - the host to connect to
+     * @param port - the port to connect to
+     */
     public static void waitUntilRabbitMqReady(String host, int port) {
         System.out.println("Sending Task");
         ConnectionFactory factory = new ConnectionFactory();
@@ -120,6 +146,11 @@ public class DBPrefs {
 
     }
 
+    /**
+     * Method that sets up configurations for the connection
+     * to the Image database
+     * @return
+     */
     public static BasicDataSource getImageDataSource() {
 
         Map<String, String> env = System.getenv();
@@ -139,6 +170,9 @@ public class DBPrefs {
         return dbPoolSourc;
     }
 
+    /**
+     * Method that waits until the database and rabbitmq are connected to
+     */
     public static void waitDefaultDBConnections() {
         DBPrefs.waitUntilConnected();
         DBPrefs.waitUntilRabbitMqReady(DEFAULT_RABBIT_MQ_HOST, DEFAULT_RABBIT_MQ_PORT);
