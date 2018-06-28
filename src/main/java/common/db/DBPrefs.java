@@ -92,7 +92,7 @@ public class DBPrefs {
 					Statement ex1 = ex.createStatement();
 					connected = ex1.execute("SELECT 1;");
 				} catch (SQLException var7) {
-					System.out.println("Failed to Connect. Will retry");
+					System.out.println("Failed to Connect. Will retry in 2000 milliseconds.");
 				} finally {
 					if (ex != null) {
 						ex.close();
@@ -100,26 +100,23 @@ public class DBPrefs {
 
 				}
 			} catch (SQLException var9) {
-				System.out.println("Connection error 1");
+				System.out.println("Connection error 1. Will retry in 2000 milliseconds.");
 			}
 			pause();
-			System.out.println("Waiting for DB Connection");
+			System.out.println("Waiting for DB Connection. Will retry in 2000 milliseconds.");
 		}
 		try {
 			ex.close();
 		} catch (SQLException e) {
-			System.out.println("Connection error 2");
+			System.out.println("Error closing connection from data source.");
 		}
 	}
 
 	/**
 	 * Method that attempts to connect to rabbitmq until a connection is successful,
 	 * pausing for 2000 milliseconds between request
-	 * 
-	 * @param host
-	 *            - the host to connect to
-	 * @param port
-	 *            - the port to connect to
+	 * @param host - the host to connect to
+	 * @param port - the port to connect to
 	 */
 	public static void waitUntilRabbitMqReady(String host, int port) {
 		System.out.println("Sending Task");
@@ -138,7 +135,7 @@ public class DBPrefs {
 			}
 
 			pause();
-			System.out.println("Waiting for Rabbit MQ Connection");
+			System.out.println("Waiting for Rabbit MQ Connection. Will retry in 2000 milliseconds.");
 		}
 
 	}
